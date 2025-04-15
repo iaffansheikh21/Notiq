@@ -39,7 +39,7 @@ export default function Home() {
             Get Started
           </Link>
           <Link
-            href="features"
+            href="learn-more"
             className="border-2 border-white px-6 py-3 rounded-xl hover:bg-white hover:text-indigo-600 transition duration-300"
           >
             Learn More

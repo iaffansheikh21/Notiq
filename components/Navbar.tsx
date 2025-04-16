@@ -19,7 +19,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "/public/logo.png"; // Path to the logo image
+
 
 export default function Navbar() {
   return (

@@ -1,90 +1,95 @@
-// "use client";
-// import { useEffect, useState } from "react";
-// import { useRouter } from "next/router";
-// import { motion } from "framer-motion";
+"use client";
 
-// export default function NoteDetails() {
-//   const router = useRouter();
-//   const { id } = router.query;
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
 
-//   const [note, setNote] = useState<{ title: string; content: string }>({
-//     title: "",
-//     content: "",
-//   });
-//   const [isEditing, setIsEditing] = useState(false);
-//   const [loading, setLoading] = useState(true);
+// Dynamically import ReactQuill to ensure it's only rendered on the client side
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-//   useEffect(() => {
-//     if (id) {
-//       // Simulate fetching the note based on its ID from a database
-//       setLoading(true);
-//       setTimeout(() => {
-//         setNote({
-//           title: "Sample Note Title",
-//           content: "This is the content of the note. You can edit it.",
-//         });
-//         setLoading(false);
-//       }, 1000);
-//     }
-//   }, [id]);
+export default function NoteDetails() {
+  const { id } = useParams();
+  const [note, setNote] = useState({ title: "", content: "" });
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-//   const handleSave = () => {
-//     // Simulate saving the updated note (can integrate with backend later)
-//     setIsEditing(false);
-//     alert("Note saved!");
-//   };
+  useEffect(() => {
+    if (id) {
+      // Simulate fetching the note based on the ID (this can be an API call in real projects)
+      setTimeout(() => {
+        setNote({
+          title: "Sample Note Title",
+          content: "<p>This is the content of the note. You can edit it.</p>",
+        });
+        setLoading(false);
+      }, 800);
+    }
+  }, [id]);
 
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-blue-500 text-white p-6">
-//       <motion.div
-//         initial={{ opacity: 0 }}
-//         animate={{ opacity: 1 }}
-//         transition={{ duration: 0.5 }}
-//         className="max-w-2xl mx-auto bg-white text-indigo-700 rounded-lg shadow-xl p-8"
-//       >
-//         {loading ? (
-//           <div className="text-center text-lg text-gray-500">Loading...</div>
-//         ) : (
-//           <div className="space-y-6">
-//             <motion.h2
-//               initial={{ opacity: 0, y: -30 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ delay: 0.2, duration: 0.5 }}
-//               className="text-3xl font-bold"
-//             >
-//               {isEditing ? "Edit Your Note" : note.title}
-//             </motion.h2>
+  const handleSave = () => {
+    // Handle the save logic (send to server, etc.)
+    setIsEditing(false);
+    alert("Note saved!");
+  };
 
-//             <motion.textarea
-//               initial={{ opacity: 0, scale: 0.95 }}
-//               animate={{ opacity: 1, scale: 1 }}
-//               transition={{ delay: 0.4, duration: 0.6 }}
-//               value={note.content}
-//               onChange={(e) => setNote({ ...note, content: e.target.value })}
-//               disabled={!isEditing}
-//               rows={10}
-//               className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600 text-gray-700 resize-none"
-//             />
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-500 text-white p-6">
+      <div className="max-w-4xl mx-auto bg-white text-indigo-700 rounded-2xl shadow-2xl p-8 space-y-6 transition-all duration-500">
+        {/* App Branding */}
+        <div className="text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight">NOTIQ</h1>
+          <p className="text-sm text-gray-400 mt-1">Capture. Organize. Think Smarter.</p>
+        </div>
 
-//             <div className="flex justify-between items-center">
-//               <button
-//                 onClick={() => setIsEditing(!isEditing)}
-//                 className="bg-indigo-600 text-white py-2 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300"
-//               >
-//                 {isEditing ? "Cancel" : "Edit Note"}
-//               </button>
-//               {isEditing && (
-//                 <button
-//                   onClick={handleSave}
-//                   className="bg-green-600 text-white py-2 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300"
-//                 >
-//                   Save Changes
-//                 </button>
-//               )}
-//             </div>
-//           </div>
-//         )}
-//       </motion.div>
-//     </div>
-//   );
-// }
+        {/* Loading State */}
+        {loading ? (
+          <p className="text-center text-gray-500">Loading note...</p>
+        ) : (
+          <>
+            {/* Title Input */}
+            <input
+              type="text"
+              value={note.title}
+              disabled={!isEditing}
+              onChange={(e) => setNote({ ...note, title: e.target.value })}
+              className={`w-full text-2xl font-bold border-2 p-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                isEditing ? "bg-white text-gray-900" : "bg-gray-100 text-gray-500"
+              }`}
+              placeholder="Note title..."
+            />
+
+            {/* Rich Text Editor */}
+            <div className="text-gray-800">
+              <ReactQuill
+                value={note.content}
+                onChange={(value) => setNote({ ...note, content: value })}
+                readOnly={!isEditing}
+                theme={isEditing ? "snow" : "bubble"}
+                className="bg-white rounded-xl"
+              />
+            </div>
+
+            {/* Edit and Save Buttons */}
+            <div className="flex justify-between pt-4">
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+              >
+                {isEditing ? "Cancel" : "Edit"}
+              </button>
+              {isEditing && (
+                <button
+                  onClick={handleSave}
+                  className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition"
+                >
+                  Save
+                </button>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

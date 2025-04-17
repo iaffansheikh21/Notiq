@@ -1,16 +1,18 @@
 "use client";
 
+import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 
 export default function LearnMore() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-500 via-purple-600 to-blue-500 text-white flex flex-col items-center justify-center p-8">
+      <Navbar />
       {/* Title Section */}
       <motion.h1
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="text-5xl md:text-6xl font-extrabold text-center leading-tight mb-6"
+        className="text-3xl mt-16 md:text-6xl font-extrabold text-center leading-tight mb-6"
       >
         Learn More About <span className="text-yellow-300">NOTIQ</span>
       </motion.h1>

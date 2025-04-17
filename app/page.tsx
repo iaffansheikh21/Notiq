@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-600 to-blue-500 text-white flex items-center justify-center px-4">
+      <Navbar />
       <div className="max-w-4xl text-center space-y-10 py-16">
         <motion.h1 
           initial={{ opacity: 0, y: -40 }} 

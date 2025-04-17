@@ -1,10 +1,13 @@
 "use client";
 
+import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import Link from "next/link";
+
 export default function Features() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-blue-600 text-white">
+      <Navbar />
       {/* Header Section */}
       <div className="max-w-6xl mx-auto text-center pt-16 pb-8">
         <motion.h1

@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 
@@ -104,6 +105,7 @@ export default function LearnMore() {
           </a>
         </motion.div>
       </motion.div>
+      <Footer/>
     </div>
   );
 }

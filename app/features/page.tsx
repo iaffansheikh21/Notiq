@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -112,7 +113,7 @@ export default function Features() {
       </div>
 
       {/* Call to Action */}
-      <div className="bg-indigo-600 py-16 text-center text-white">
+      <div className="py-16 text-center text-white">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -136,6 +137,7 @@ export default function Features() {
           Get Started
         </Link>
       </div>
+      <Footer/>
     </div>
   );
 }

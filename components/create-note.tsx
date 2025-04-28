@@ -364,9 +364,3 @@ export default function CreateNote() {
     </div>
   )
 }
-
-
-
-
-
-

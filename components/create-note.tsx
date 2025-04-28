@@ -12,6 +12,7 @@ import {
   Inbox,
   Settings,
   Trash,
+  Trash2,
   Users,
   Plus,
   Share,
@@ -51,7 +52,8 @@ export default function CreateNote() {
   const { theme, setTheme } = useTheme()
 
   // Note store
-  const { notes, activeNoteId, addNote, updateNote, deleteNote, setActiveNote, starNote, unstarNote } = useNoteStore()
+  const { notes, trash, activeNoteId, addNote, updateNote, deleteNote, setActiveNote, starNote, unstarNote } =
+    useNoteStore()
 
   // Get active note
   const activeNote = notes.find((note) => note.id === activeNoteId) || {
@@ -119,14 +121,14 @@ export default function CreateNote() {
   // Filter notes for search
   const filteredNotes = searchQuery
     ? notes.filter(
-        (note:any) =>
+        (note) =>
           note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           note.content.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : notes
 
   // Get starred notes
-  const starredNotes = notes.filter((note:any) => note.starred)
+  const starredNotes = notes.filter((note) => note.starred)
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background text-foreground">
@@ -220,18 +222,34 @@ export default function CreateNote() {
                 </div>
                 <div className="space-y-1">
                   {notes.map((note) => (
-                    <button
+                    <div
                       key={note.id}
                       className={cn(
-                        "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm",
+                        "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm group",
                         activeNoteId === note.id ? "bg-accent" : "hover:bg-accent",
                       )}
-                      onClick={() => setActiveNote(note.id)}
                     >
-                      <FileText size={16} />
-                      <span className="truncate">{note.title}</span>
-                      {note.starred && <Star size={14} className="ml-auto text-yellow-500" />}
-                    </button>
+                      <button
+                        className="flex-1 flex items-center gap-2 text-left"
+                        onClick={() => setActiveNote(note.id)}
+                      >
+                        <FileText size={16} />
+                        <span className="truncate">{note.title}</span>
+                        {note.starred && <Star size={14} className="ml-auto text-yellow-500" />}
+                      </button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          deleteNote(note.id)
+                        }}
+                      >
+                        <Trash2 size={14} className="text-muted-foreground hover:text-destructive" />
+                        <span className="sr-only">Move to trash</span>
+                      </Button>
+                    </div>
                   ))}
                   <button
                     className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
@@ -273,6 +291,11 @@ export default function CreateNote() {
               >
                 <Trash size={16} />
                 <span>Trash</span>
+                {trash.length > 0 && (
+                  <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-muted px-1.5 text-xs font-medium">
+                    {trash.length}
+                  </span>
+                )}
               </button>
               <button className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent">
                 <Users size={16} />

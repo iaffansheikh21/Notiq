@@ -70,3 +70,4 @@ export function TrashDialog({ open, onOpenChange }: TrashDialogProps) {
     </Dialog>
   )
 }
+
